@@ -110,22 +110,22 @@ ServiceRef::SetSocketFlags() {
 
 NAN_PROPERTY_GETTER(ServiceRef::fd_getter) {
     NanScope();
-    // ServiceRef * service_ref = ObjectWrap::Unwrap<ServiceRef>(args.This());
+    ServiceRef * service_ref = node::ObjectWrap::Unwrap<ServiceRef>(args.This());
     int fd = -1;
-    // if (service_ref->ref_) {
-    //     fd = DNSServiceRefSockFD(service_ref->ref_);
-    //     if (fd == -1) {
-    //         NanThrowError("DNSServiceRefSockFD() failed");
-    //         NanReturnUndefined();
-    //     }
-    // }
+    if (service_ref->ref_) {
+        fd = DNSServiceRefSockFD(service_ref->ref_);
+        if (fd == -1) {
+            NanThrowError("DNSServiceRefSockFD() failed");
+            NanReturnUndefined();
+        }
+    }
     Local<Integer> v = NanNew<Integer>(fd);
     NanReturnValue(v);
 }
 
 NAN_PROPERTY_GETTER(ServiceRef::initialized_getter) {
     NanScope();
-    ServiceRef * service_ref = ObjectWrap::Unwrap<ServiceRef>(args.This());
+    ServiceRef * service_ref = node::ObjectWrap::Unwrap<ServiceRef>(args.This());
     NanReturnValue(NanNew<Boolean>(service_ref->IsInitialized()));
 }
 
